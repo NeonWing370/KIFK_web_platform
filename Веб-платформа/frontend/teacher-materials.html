@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Матеріали викладача | CodeStudy</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="teacher-materials">
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <div class="dashboard-shell">
+    <aside class="dashboard-sidebar" id="dashboardSidebar">
+      <div class="sidebar-brand">
+        <span class="brand-mark">CS</span>
+        <a class="brand" href="index.html"><span>CodeStudy</span></a>
+      </div>
+      <div class="sidebar-user" id="sidebarUser"></div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <button class="sidebar-link danger" id="logoutButton" type="button">Вийти</button>
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <header class="dashboard-topbar">
+        <button class="menu-button" id="menuButton" aria-label="Відкрити меню">
+          <span></span><span></span><span></span>
+        </button>
+        <h1>Матеріали</h1>
+        <span class="user-chip" id="userChip"></span>
+      </header>
+
+      <main class="dashboard-content">
+        <p class="auth-subtitle">Створюйте текстові уроки, оголошення про майбутні події або завантажуйте файли Word, PDF, PowerPoint та зображення. Усе зберігається в <code>data/codestudy-platform.json</code> (копія в браузері).</p>
+
+        <article class="content-panel teacher-form-panel">
+          <h3>Створити матеріал</h3>
+          <form class="form" id="materialForm">
+            <label>
+              Курс
+              <select id="materialCourse" required></select>
+            </label>
+            <label>
+              Тип матеріалу
+              <select id="materialType" required>
+                <option value="text">Текстовий матеріал</option>
+                <option value="event">Майбутня подія (сповіщає студентів)</option>
+                <option value="file">Завантаження файлу</option>
+              </select>
+            </label>
+            <label>
+              Назва
+              <input id="materialTitle" type="text" placeholder="Назва матеріалу" required>
+            </label>
+            <label id="contentField">
+              Зміст
+              <textarea id="materialContent" class="profile-bio" placeholder="Напишіть текст уроку або опис події..."></textarea>
+            </label>
+            <label id="eventDateField" class="hidden">
+              Дата події
+              <input id="materialEventDate" type="datetime-local">
+            </label>
+            <label id="fileField" class="hidden">
+              Файл (Word, PDF, PowerPoint або зображення)
+              <input id="materialFile" type="file" accept=".doc,.docx,.pdf,.ppt,.pptx,.png,.jpg,.jpeg,.gif,.webp,image/*">
+            </label>
+            <button class="button primary" type="submit">Опублікувати матеріал</button>
+          </form>
+          <p class="message" id="materialMessage"></p>
+        </article>
+
+        <section class="section" style="padding: 0; margin-top: 24px;">
+          <div class="section-heading">
+            <h2>Опубліковані матеріали</h2>
+          </div>
+          <div id="materialsList" class="materials-list"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/storage.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
