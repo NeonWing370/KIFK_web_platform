@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сповіщення | KIFK</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="notifications">
+  <div class="drawer-overlay auth-only" id="drawerOverlay"></div>
+  <aside class="platform-drawer auth-only" id="drawer">
+    <div class="sidebar-brand">
+      <span class="brand-mark">K</span>
+      <a class="brand" href="index.html"><span>KIFK</span></a>
+    </div>
+    <div class="sidebar-user" id="sidebarUser"></div>
+    <nav class="sidebar-nav" id="drawerNav"></nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-link danger" id="logoutButton" type="button">Вийти</button>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <button class="menu-button auth-only" id="menuButton" aria-label="Відкрити меню">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <a class="brand" href="index.html">
+      <span class="brand-mark">K</span>
+      <span>KIFK</span>
+    </a>
+    <nav class="guest-nav guest-only">
+      <a href="login.html">Увійти</a>
+      <a class="button small" href="register.html">Зареєструватися</a>
+    </nav>
+    <span class="user-chip auth-only" id="userChip"></span>
+  </header>
+
+  <main class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Вхідні</p>
+      <h1>Сповіщення</h1>
+      <p>Системні повідомлення та повідомлення курсу зібрані тут.</p>
+    </div>
+    <div class="hero-actions auth-only">
+      <button class="button small" id="markAllNotificationsButton" type="button">Позначити все прочитаним</button>
+    </div>
+    <div class="notification-list" id="notificationList"></div>
+    <div class="hero-actions">
+      <a class="button ghost" href="dashboard.html">Назад до панелі</a>
+    </div>
+  </main>
+
+  <script src="assets/storage.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

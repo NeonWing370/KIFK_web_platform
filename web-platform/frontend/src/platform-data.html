@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON-дані | KIFK</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="platform-data">
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <div class="dashboard-shell">
+    <aside class="dashboard-sidebar" id="dashboardSidebar">
+      <div class="sidebar-brand">
+        <span class="brand-mark">K</span>
+        <a class="brand" href="index.html"><span>KIFK</span></a>
+      </div>
+      <div class="sidebar-user" id="sidebarUser"></div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <button class="sidebar-link danger" id="logoutButton" type="button">Вийти</button>
+      </div>
+    </aside>
+
+    <div class="dashboard-main">
+      <header class="dashboard-topbar">
+        <button class="menu-button" id="menuButton" aria-label="Відкрити меню"><span></span><span></span><span></span></button>
+        <h1>JSON-дані</h1>
+        <span class="user-chip" id="userChip"></span>
+      </header>
+
+      <main class="dashboard-content">
+        <p class="auth-subtitle">Перегляд даних localStorage лише для адміна, натхненний структурою сутностей прототипу.</p>
+        <div class="stats-grid" id="dataStats"></div>
+        <div class="json-box" style="margin-top: 20px;">
+          <div class="json-header">
+            <h3>JSON KIFK-platform</h3>
+            <button class="button small" id="downloadJsonButton" type="button">Завантажити JSON</button>
+          </div>
+          <pre id="platformJsonPreview"></pre>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/storage.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

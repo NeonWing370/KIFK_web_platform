@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Комп'ютерна електроніка | KIFK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/electronics-template.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="course-shell electronics-course electric-course-page" data-page="course" data-course="electronics">
+  <div class="grid-bg"></div>
+  <div class="gradient-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="shapes-container">
+    <div class="shape shape-circle"></div>
+    <div class="shape shape-triangle"></div>
+    <div class="shape shape-square"></div>
+  </div>
+  <div id="particles"></div>
+
+  <nav id="navbar" class="template-nav">
+    <div class="nav-container">
+      <a href="#home" class="logo-link">
+        <svg class="logo-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#FF5E00;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#00B2FF;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <polygon points="20,2 38,14 38,26 20,38 2,26 2,14" fill="none" stroke="url(#logoGradient)" stroke-width="2"/>
+          <polygon points="20,8 32,16 32,24 20,32 8,24 8,16" fill="url(#logoGradient)" opacity="0.3"/>
+          <circle cx="20" cy="20" r="3" fill="url(#logoGradient)"/>
+        </svg>
+        <span class="logo-text">ELECTRONICS</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link">Курс</a></li>
+        <li><a href="#learning" class="nav-link">Навчання</a></li>
+        <li><a href="dashboard.html" class="nav-link">Панель</a></li>
+        <li><a href="index.html" class="nav-link">Головна</a></li>
+      </ul>
+      <div class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <header class="topbar platform-topbar">
+    <button class="menu-button auth-only" id="menuButton" aria-label="Відкрити меню"><span></span><span></span><span></span></button>
+    <a class="brand" href="index.html"><span class="brand-mark">K</span><span>KIFK</span></a>
+    <nav class="guest-nav guest-only"><a href="login.html">Увійти</a><a class="button small" href="register.html">Зареєструватися</a></nav>
+    <span class="user-chip auth-only" id="userChip"></span>
+  </header>
+
+  <div class="drawer-overlay auth-only" id="drawerOverlay"></div>
+  <aside class="platform-drawer auth-only" id="drawer">
+    <div class="sidebar-brand">
+      <span class="brand-mark">K</span>
+      <a class="brand" href="index.html"><span>KIFK</span></a>
+    </div>
+    <div class="sidebar-user" id="sidebarUser"></div>
+    <nav class="sidebar-nav" id="drawerNav"></nav>
+    <div class="sidebar-footer">
+      <button class="sidebar-link danger" id="logoutButton" type="button">Вийти</button>
+    </div>
+  </aside>
+
+  <main>
+    <section class="hero template-course-hero" id="home">
+      <div class="hero-content">
+        <div class="text-rotator">
+          <div class="text-set active">
+            <h1 class="glitch-text" data-text="ВЧИСЬ">ВЧИСЬ</h1>
+            <p class="subtitle">Відкривайте щодня щось нове про комп'ютерну електроніку</p>
+          </div>
+          <div class="text-set">
+            <h1 class="glitch-text" data-text="ПЕРЕВІР">ПЕРЕВІР</h1>
+            <p class="subtitle">Перевіряйте знання вікторинами та практичними завданнями</p>
+          </div>
+          <div class="text-set">
+            <h1 class="glitch-text" data-text="ПРАКТИКУЙ">ПРАКТИКУЙ</h1>
+            <p class="subtitle">Застосовуйте схеми, діоди та сигнали в реальних навчальних модулях</p>
+          </div>
+        </div>
+      </div>
+      <div class="cta-container">
+        <button class="cta-button cta-primary auth-only" id="joinCourseButton">Приєднатися до курсу</button>
+        <a href="register.html" class="cta-button cta-primary guest-only" id="heroStartButton">Почати</a>
+        <a href="#courseContent" class="cta-button cta-secondary">Дізнатися більше</a>
+      </div>
+    </section>
+
+    <section class="section locked" id="lockedBox">
+      <h2>Доступ до курсу</h2>
+      <p id="lockedText">Спочатку зареєструйтеся або увійдіть. Потім приєднайтеся до курсу, щоб переглядати матеріали та тести.</p>
+      <div class="hero-actions"><a class="button primary" href="register.html">Зареєструватися</a><a class="button ghost" href="login.html">Увійти</a></div>
+    </section>
+
+    <section class="features course-content" id="courseContent">
+      <h2 class="section-title">Навчальна зона</h2>
+      <nav class="course-tabs electronics-tabs" id="courseTabs">
+        <button class="active" data-tab="overview">Огляд</button>
+        <button data-tab="lessons">All</button>
+        <button data-tab="materials">Матеріали</button>
+        <button data-tab="quiz">Тести</button>
+        <button data-tab="progress">Прогрес</button>
+        <button class="teacher-only hidden" data-tab="teacher">Інструменти викладача</button>
+      </nav>
+
+      <div id="learning" class="course-panels">
+        <div class="tab-panel active" data-panel="overview">
+          <div class="course-overview-grid">
+            <article class="content-panel wide-panel"><p class="eyebrow">Банер курсу</p><h3>Комп'ютерна електроніка</h3><p>Апаратне забезпечення, напівпровідники, схеми, сигнали та практична цифрова електроніка.</p></article>
+            <article class="content-panel"><h3>Деталі</h3><ul id="courseDetails"></ul></article>
+          </div>
+        </div>
+        <div class="content-grid tab-panel" data-panel="lessons"><article class="content-panel"><h3>All</h3><div id="lessonList" class="materials-list"></div></article></div>
+        <div class="tab-panel" data-panel="materials"><article class="content-panel"><h3>Матеріали курсу</h3><div id="courseMaterialsList" class="materials-list"></div></article></div>
+        <div class="tab-panel" data-panel="quiz"><article class="content-panel"><h3>Тести курсу</h3><div id="studentTestsList"></div></article></div>
+        <div class="tab-panel" data-panel="progress"><article class="content-panel"><h3>Відстеження прогресу</h3><div id="progressTracker"></div></article></div>
+        <div class="tab-panel teacher-tools hidden" data-panel="teacher">
+          <article class="content-panel"><h3>Робочий простір викладача</h3><p>Керуйте опублікованим контентом на спеціальних сторінках викладача.</p><div class="hero-actions"><a class="button primary" href="teacher-materials.html">Матеріали</a><a class="button ghost" href="teacher-tests.html">Тести та аналітика</a></div></article>
+          <article class="content-panel"><h3>Створити урок</h3><form class="form mini-form" id="lessonForm"><input id="lessonTitle" type="text" placeholder="Назва уроку" required><button class="button primary" type="submit">Створити урок</button></form></article>
+          <article class="content-panel"><h3>Записані студенти</h3><ul id="enrolledStudents"></ul></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <form id="contactForm" style="display:none"><input><button>Send</button></form>
+  <div class="course-loader electronics-loader" id="courseLoader"><div><span class="loader-ring"></span><p>Завантаження комп'ютерної електроніки...</p></div></div>
+  <script src="assets/electronics-template.js"></script>
+  <script src="assets/storage.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
