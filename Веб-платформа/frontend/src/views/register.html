@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Реєстрація | KIFK</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="register">
+  <main class="auth-page">
+    <section class="auth-card">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">K</span>
+        <span>KIFK</span>
+      </a>
+      <h1>Створіть обліковий запис</h1>
+      <p class="auth-subtitle">Приєднуйтесь до платформи, оберіть роль і одразу переходьте на особисту сторінку.</p>
+
+      <form class="form" id="registerForm">
+        <label>
+          Повне ім'я
+          <input id="name" type="text" placeholder="Ваше ім'я" required>
+        </label>
+        <label>
+          Email
+          <input id="email" type="email" placeholder="you@example.com" required>
+        </label>
+
+        <div>
+          <span class="eyebrow">Роль</span>
+          <div class="role-selector" id="roleSelector">
+            <button type="button" class="active" data-role="student">Студент</button>
+            <button type="button" data-role="teacher">Викладач</button>
+            <button type="button" data-role="admin">Адмін</button>
+          </div>
+          <input type="hidden" id="role" value="student">
+        </div>
+
+        <label>
+          Пароль
+          <span class="input-wrap">
+            <input id="password" type="password" minlength="6" placeholder="Щонайменше 6 символів" required>
+            <button class="password-toggle" type="button" data-target="password" aria-label="Показати пароль">Показати</button>
+          </span>
+        </label>
+        <label>
+          Підтвердіть пароль
+          <span class="input-wrap">
+            <input id="confirmPassword" type="password" minlength="6" placeholder="Повторіть пароль" required>
+            <button class="password-toggle" type="button" data-target="confirmPassword" aria-label="Показати пароль">Показати</button>
+          </span>
+        </label>
+
+        <button class="button primary full" type="submit" id="registerSubmit">Створити обліковий запис</button>
+      </form>
+
+      <p class="auth-link">Вже зареєстровані? <a href="login.html">Увійти</a></p>
+      <p class="message" id="message"></p>
+    </section>
+  </main>
+
+  <script src="assets/storage.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

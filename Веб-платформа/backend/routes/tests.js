@@ -23,11 +23,13 @@ async function findCourse(courseId) {
     }
 
     const normalized = String(courseId).toLowerCase().trim();
-    const aliases = normalized === "electronics"
-        ? ["electronics", "computer-electronics", "computer electronics", "comp electronics"]
-        : normalized === "logic"
-            ? ["logic", "computer-logic", "computer logic", "comp logic"]
-            : [normalized];
+
+    const aliases =
+        normalized === "electronics"
+            ? ["electronics", "computer-electronics", "computer electronics", "comp electronics"]
+            : normalized === "logic"
+                ? ["logic", "computer-logic", "computer logic", "comp logic"]
+                : [normalized];
 
     return Course.findOne({
         $or: [
@@ -38,7 +40,12 @@ async function findCourse(courseId) {
             },
             {
                 title: {
-                    $regex: normalized === "electronics" ? "electronics" : normalized === "logic" ? "logic" : normalized,
+                    $regex:
+                        normalized === "electronics"
+                            ? "electronics"
+                            : normalized === "logic"
+                                ? "logic"
+                                : normalized,
                     $options: "i"
                 }
             }
@@ -65,13 +72,34 @@ async function resolveCourse(courseId, userId) {
 router.get("/course/:courseId", auth, async (req, res) => {
     try {
         const course = await findCourse(req.params.courseId);
-        const tests = course ? await Test.find({
-            course: course._id
-        }).sort({
-            createdAt: -1
-        }) : [];
+
+        const tests = course
+            ? await Test.find({
+                course: course._id
+            }).sort({
+                createdAt: -1
+            })
+            : [];
 
         res.json(tests);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+});
+
+router.get("/:id", auth, async (req, res) => {
+    try {
+        const test = await Test.findById(req.params.id);
+
+        if (!test) {
+            return res.status(404).json({
+                message: "Test not found"
+            });
+        }
+
+        res.json(test);
     } catch (error) {
         res.status(500).json({
             message: error.message
@@ -93,7 +121,7 @@ router.post("/", auth, async (req, res) => {
             title: req.body.title,
             course: course._id,
             author: req.user.id,
-            passScore: req.body.passScore,
+            passScore: req.body.passScore || 60,
             availableFrom: req.body.availableFrom,
             deadline: req.body.deadline,
             showAnswers: req.body.showAnswers,
@@ -101,13 +129,17 @@ router.post("/", auth, async (req, res) => {
         });
 
         if (course) {
-            await Promise.all((course.students || []).map((studentId) => Notification.create({
-                user: studentId,
-                course: course._id,
-                type: "test",
-                title: "New test",
-                text: `${test.title} is available in ${course.title}.`
-            })));
+            await Promise.all(
+                (course.students || []).map((studentId) =>
+                    Notification.create({
+                        user: studentId,
+                        course: course._id,
+                        type: "test",
+                        title: "New test",
+                        text: `${test.title} is available in ${course.title}.`
+                    })
+                )
+            );
         }
 
         res.status(201).json(test);
@@ -162,6 +194,7 @@ router.delete("/:id", auth, async (req, res) => {
         await Result.deleteMany({
             test: req.params.id
         });
+
         await Test.findByIdAndDelete(req.params.id);
 
         res.json({
@@ -191,6 +224,7 @@ router.post("/:id/submit", auth, async (req, res) => {
         }
 
         const answers = Array.isArray(req.body.answers) ? req.body.answers : [];
+
         let score = 0;
         let maxScore = 0;
 
@@ -200,7 +234,10 @@ router.post("/:id/submit", auth, async (req, res) => {
             const correct = answer === Number(question.answer);
 
             maxScore += points;
-            if (correct) score += points;
+
+            if (correct) {
+                score += points;
+            }
 
             return {
                 questionIndex: index,
@@ -210,7 +247,10 @@ router.post("/:id/submit", auth, async (req, res) => {
             };
         });
 
-        const percentage = maxScore ? Math.round((score / maxScore) * 100) : 0;
+        const percentage = maxScore
+            ? Math.round((score / maxScore) * 100)
+            : 0;
+
         const result = await Result.findOneAndUpdate(
             {
                 test: test._id,

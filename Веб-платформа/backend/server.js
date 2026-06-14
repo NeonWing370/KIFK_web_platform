@@ -6,15 +6,35 @@ const connectDB = require("./config/db");
 
 const app = express();
 
+const allowedOrigins = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: [
-        "http://localhost:8080",
-        "http://127.0.0.1:8080"
-    ],
+    origin(origin, callback) {
+        if (
+            !origin ||
+            allowedOrigins.includes(origin) ||
+            /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)
+        ) {
+            return callback(null, true);
+        }
+
+        return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true
 }));
 
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
+app.use(
+    "/api/forum",
+    require("./routes/forum")
+);
 
 app.get("/", (req,res)=>{
     res.send("CodeStudy API");
@@ -69,6 +89,10 @@ require("./routes/results")
 app.use(
 "/api/bootstrap",
 require("./routes/bootstrap")
+);
+app.use(
+    "/api/submissions",
+    require("./routes/submissions")
 );
 
 const PORT = process.env.PORT || 5000;

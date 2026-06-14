@@ -13,10 +13,11 @@ new mongoose.Schema({
     type:{
         type:String,
         enum:[
-            "text",
-            "file",
-            "event"
-        ],
+    "text",
+    "file",
+    "event",
+    "practice"
+],
         default:"text"
     },
 

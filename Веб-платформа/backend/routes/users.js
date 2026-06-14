@@ -48,6 +48,8 @@ async (req, res) => {
 
 // UPDATE PROFILE
 
+// UPDATE PROFILE
+
 router.put(
 "/profile",
 auth,
@@ -74,7 +76,10 @@ async (req, res) => {
                 new: true
             }
 
-        ).select("-password -verificationCode");
+        )
+        .select("-password -verificationCode")
+        .populate("group", "name")
+        .populate("joinedCourses", "title slug");
 
         res.json(user);
 
@@ -171,6 +176,37 @@ async (req, res) => {
         ).select("-password -verificationCode");
 
         res.json(user);
+
+    }
+    catch (error) {
+
+        res.status(500).json({
+            message:
+            error.message
+        });
+
+    }
+
+});
+
+
+// DELETE CURRENT USER
+
+router.delete(
+"/me",
+auth,
+async (req, res) => {
+
+    try {
+
+        await User.findByIdAndDelete(
+            req.user.id
+        );
+
+        res.json({
+            message:
+            "Account deleted"
+        });
 
     }
     catch (error) {
