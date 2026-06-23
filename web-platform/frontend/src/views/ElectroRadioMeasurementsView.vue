@@ -1,5 +1,5 @@
 <template>
-  <div class="course-shell electronics-course electric-course-page">
+  <div class="course-shell electronics-course electric-course-page electro-radio-measurements-course">
     <div class="electronics-bg" aria-hidden="true">
       <div class="electronics-grid"></div>
       <div class="electronics-glow glow-warm"></div>
@@ -39,9 +39,9 @@
     <main>
       <section class="hero template-course-hero">
         <div class="hero-content">
-          <h1>Комп'ютерна електроніка</h1>
+          <h1>Електрорадіо вимірювання</h1>
           <p class="subtitle">
-            Апаратне забезпечення, напівпровідники, схеми, сигнали та цифрова електроніка.
+            Прилади, точність вимірювань, сигнали та аналіз електричних параметрів.
           </p>
         </div>
 
@@ -96,16 +96,16 @@
             <div class="course-overview-grid">
               <article class="content-panel wide-panel">
                 <p class="eyebrow">Банер курсу</p>
-                <h3>Комп'ютерна електроніка</h3>
+                <h3>Електрорадіо вимірювання</h3>
                 <p>
-                  Електронні компоненти, схеми, сигнали, сенсори та базові принципи апаратного забезпечення.
+                  Прилади, точність вимірювань, сигнали та аналіз електричних параметрів.
                 </p>
               </article>
 
               <article class="content-panel">
                 <h3>Деталі</h3>
                 <ul>
-                  <li>Тут ви вивчите більше про діоди, резистори, мікросхеми, сигнали та роботу базових електронних схем.</li>
+                  <li>Тут ви навчитеся працювати з вимірювальними приладами, читати сигнали та оцінювати точність електричних вимірювань.</li>
                 </ul>
               </article>
             </div>
@@ -264,9 +264,9 @@ const profileMenuOpen = ref(false);
 const isJoined = computed(() => {
   return user.value.joinedCourses?.some((course) => {
     return (
-      course.slug === "electronics" ||
-      course === "electronics" ||
-      course.title === "Computer Electronics"
+      course.slug === "electro-radio-measurements" ||
+      course === "electro-radio-measurements" ||
+      course.title === "Electro-Radio Measurements"
     );
   });
 });
@@ -298,7 +298,7 @@ onMounted(async () => {
     await loadMaterials();
 
     try {
-      const testsRes = await api.get("/tests/course/electronics");
+      const testsRes = await api.get("/tests/course/electro-radio-measurements");
       tests.value = testsRes.data;
     } catch {
       tests.value = [];
@@ -307,7 +307,7 @@ onMounted(async () => {
     try {
       const resultsRes = await api.get("/results");
       results.value = resultsRes.data.filter((result) => {
-        return result.course?.slug === "electronics";
+        return result.course?.slug === "electro-radio-measurements";
       });
     } catch {
       results.value = [];
@@ -319,7 +319,7 @@ onMounted(async () => {
 
 async function loadMaterials() {
   try {
-    const materialsRes = await api.get("/materials/course/electronics");
+    const materialsRes = await api.get("/materials/course/electro-radio-measurements");
     materials.value = materialsRes.data;
   } catch {
     materials.value = [];
@@ -330,7 +330,7 @@ async function joinCourse() {
   if (isJoined.value) return;
 
   try {
-    await api.post("/courses/electronics/enroll");
+    await api.post("/courses/electro-radio-measurements/enroll");
 
     const userRes = await api.get("/users/me");
     user.value = userRes.data;
@@ -386,11 +386,11 @@ function testLink(testId) {
   if (studentPreview.value) {
     return {
       path: `/tests/${testId}`,
-      query: { preview: "1", returnTo: "electronics" }
+      query: { preview: "1", returnTo: "electro-radio-measurements" }
     };
   }
 
-  return { path: `/tests/${testId}`, query: { returnTo: "electronics" } };
+  return { path: `/tests/${testId}`, query: { returnTo: "electro-radio-measurements" } };
 }
 
 function toggleStudentPreview() {
@@ -467,6 +467,11 @@ function toggleStudentPreview() {
   background: #070707;
   color: #fff;
   position: relative;
+}
+
+.electro-radio-measurements-course {
+  --electric-orange: #ba8cff;
+  --electric-blue: #ff6f91;
 }
 
 .electronics-bg,
@@ -1049,4 +1054,127 @@ main,
   z-index: 8;
   margin-top: 28px;
 }
+.electro-radio-measurements-course {
+  --electric-orange: #c084fc;
+  --electric-blue: #fb7185;
+  background: #12091d;
+}
+
+.electro-radio-measurements-course .electronics-bg {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 55px, rgba(192, 132, 252, 0.08) 56px 57px),
+    #12091d;
+}
+
+.electro-radio-measurements-course .electronics-grid {
+  inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0 62px, rgba(251, 113, 133, 0.07) 63px 64px);
+  opacity: .6;
+  animation: radio-sweep-grid 9s linear infinite;
+}
+
+.electro-radio-measurements-course .electronics-glow {
+  border-radius: 0;
+  filter: blur(20px);
+  opacity: .28;
+}
+
+.electro-radio-measurements-course .glow-warm {
+  width: 62vw;
+  height: 3px;
+  top: 31%;
+  left: -8%;
+  background: #c084fc;
+  animation: radio-scanline 4.2s ease-in-out infinite;
+}
+
+.electro-radio-measurements-course .glow-cool {
+  width: 42vw;
+  height: 3px;
+  right: -8%;
+  bottom: 26%;
+  background: #fb7185;
+  animation: radio-scanline 5.4s ease-in-out infinite reverse;
+}
+
+.electro-radio-measurements-course .electronics-shape.ring {
+  width: 260px;
+  height: 100px;
+  border-radius: 50% 50% 0 0;
+  border-color: rgba(192, 132, 252, 0.7);
+  border-bottom: 0;
+  animation: radio-wave-expand 5.5s ease-out infinite;
+}
+
+.electro-radio-measurements-course .electronics-shape.chip {
+  width: 210px;
+  height: 88px;
+  border-color: rgba(251, 113, 133, 0.7);
+  transform: skewX(-18deg);
+  animation: radio-wave-expand 6.5s ease-out infinite 1.2s;
+}
+
+.electro-radio-measurements-course .electronics-shape.pulse {
+  width: 300px;
+  height: 76px;
+  border-color: rgba(192, 132, 252, 0.58);
+  clip-path: polygon(0 52%, 9% 52%, 14% 15%, 20% 85%, 27% 35%, 34% 52%, 100% 52%, 100% 58%, 34% 58%, 27% 74%, 20% 22%, 14% 92%, 9% 58%, 0 58%);
+  animation: radio-waveform-jump 2.6s steps(2, end) infinite;
+}
+
+.electro-radio-measurements-course .electric-bug-layer {
+  opacity: .8;
+  mix-blend-mode: screen;
+}
+
+.electro-radio-measurements-course .electric-bug-layer::before,
+.electro-radio-measurements-course .electric-bug-layer::after {
+  background: repeating-linear-gradient(90deg, transparent 0 14px, rgba(192,132,252,.24) 14px 16px, transparent 16px 26px);
+  clip-path: inset(46% 0 46% 0);
+  animation: radio-trace 3.6s linear infinite;
+}
+
+.electro-radio-measurements-course .electric-bug-layer::after {
+  background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(251,113,133,.23) 18px 20px, transparent 20px 33px);
+  clip-path: inset(61% 0 31% 0);
+  animation-delay: -1.8s;
+}
+
+.electro-radio-measurements-course .electric-bug-layer span {
+  height: 2px;
+  border-radius: 0;
+  background: linear-gradient(90deg, transparent, var(--electric-orange), var(--electric-blue), transparent);
+  animation-name: radio-frequency-hop;
+}
+
+.electro-radio-measurements-course .electronics-particles span {
+  width: 2px;
+  height: 22px;
+  border-radius: 0;
+  background: var(--electric-blue);
+  box-shadow: 0 0 12px rgba(251, 113, 133, 0.72);
+  animation-name: radio-frequency-hop;
+}
+
+.electro-radio-measurements-course .board-frame {
+  border-color: rgba(192, 132, 252, 0.72);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 25px, rgba(192,132,252,.1) 25px 26px),
+    #170d22;
+  box-shadow: inset 0 0 46px rgba(192,132,252,.15), 0 0 58px rgba(251,113,133,.18);
+  animation: radio-oscilloscope 4s ease-in-out infinite;
+}
+
+.electro-radio-measurements-course .processor-core {
+  border-color: var(--electric-blue);
+  box-shadow: 0 0 30px rgba(251, 113, 133, .35), inset 0 0 26px rgba(192,132,252,.2);
+}
+
+@keyframes radio-sweep-grid { to { transform: translateX(64px); } }
+@keyframes radio-scanline { 0%,100% { transform: translateX(-8vw); opacity: .18; } 50% { transform: translateX(9vw); opacity: .72; } }
+@keyframes radio-wave-expand { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.7); opacity: 0; } }
+@keyframes radio-waveform-jump { 0%,100% { transform: translateX(0); opacity: .36; } 50% { transform: translateX(36px); opacity: .88; } }
+@keyframes radio-trace { from { transform: translateX(-24vw); opacity: 0; } 20%,80% { opacity: .8; } to { transform: translateX(42vw); opacity: 0; } }
+@keyframes radio-frequency-hop { 0%,100% { transform: translate(0,0); opacity: .2; } 50% { transform: translate(22vw,-15vh); opacity: .95; } }
+@keyframes radio-oscilloscope { 0%,100% { transform: rotate(45deg) scaleY(.92); } 50% { transform: rotate(45deg) scaleY(1.07); } }
 </style>

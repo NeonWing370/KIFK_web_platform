@@ -99,6 +99,23 @@
             Відкрити курс
           </RouterLink>
         </article>
+        <article class="content-panel">
+          <h3>Комп'ютерні технології</h3>
+          <p>Сучасні цифрові інструменти, мережі та робочі процеси в ІТ.</p>
+          <RouterLink class="button primary" to="/courses/technologies">Відкрити курс</RouterLink>
+        </article>
+
+        <article class="content-panel">
+          <h3>Системне програмування</h3>
+          <p>Процеси, пам'ять, файлові системи та взаємодія програм з операційною системою.</p>
+          <RouterLink class="button primary" to="/courses/system-programming">Відкрити курс</RouterLink>
+        </article>
+
+        <article class="content-panel">
+          <h3>Електрорадіо вимірювання</h3>
+          <p>Прилади, сигнали, точність вимірювань та аналіз електричних параметрів.</p>
+          <RouterLink class="button primary" to="/courses/electro-radio-measurements">Відкрити курс</RouterLink>
+        </article>
       </section>
 
     </main>

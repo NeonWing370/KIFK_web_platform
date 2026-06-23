@@ -21,7 +21,19 @@
         <span>KIFK</span>
       </RouterLink>
 
-      <span class="user-chip">{{ user.name }} | {{ user.role }}</span>
+      <div class="course-user-menu">
+        <button class="profile-trigger" type="button" :aria-expanded="profileMenuOpen" @click="profileMenuOpen = !profileMenuOpen">
+          {{ profileInitials }}
+        </button>
+        <div v-if="profileMenuOpen" class="profile-menu">
+          <strong>{{ user.name }}</strong>
+          <RouterLink to="/profile" @click="profileMenuOpen = false">Персональний кабінет</RouterLink>
+          <RouterLink to="/notifications" @click="profileMenuOpen = false">Сповіщення</RouterLink>
+          <button v-if="canPreview" type="button" @click="toggleStudentPreview">
+            {{ studentPreview ? "Повернути режим викладача" : "Перейти в режим студента" }}
+          </button>
+        </div>
+      </div>
     </header>
 
     <main>
@@ -77,9 +89,6 @@
               <article class="content-panel">
                 <h3>Деталі</h3>
                 <ul>
-                  <li>Категорія: Digital systems</li>
-                  <li>Рівень: Intermediate</li>
-                  <li>Викладач: Course Teacher</li>
                   <li>Тут ви вивчите двійкову систему числення, булеву алгебру та принципи роботи логічних елементів.</li>
                 </ul>
               </article>
@@ -164,11 +173,13 @@
                   <p>Дедлайн: {{ test.deadline || "Не встановлено" }}</p>
 
                   <RouterLink
+                    v-if="user.role === 'student' || studentPreview"
                     class="button primary"
-                    :to="`/tests/${test._id}`"
+                    :to="testLink(test._id)"
                   >
-                    Пройти тест
+                    {{ studentPreview ? "Перевірити тест" : "Пройти тест" }}
                   </RouterLink>
+                  <p v-else>Увімкніть режим студента через меню профілю, щоб перевірити тест.</p>
                 </article>
               </div>
 
@@ -230,6 +241,8 @@ const activeTab = ref("overview");
 const materials = ref([]);
 const tests = ref([]);
 const results = ref([]);
+const studentPreview = ref(false);
+const profileMenuOpen = ref(false);
 
 const isJoined = computed(() => {
   return user.value.joinedCourses?.some((course) => {
@@ -239,6 +252,14 @@ const isJoined = computed(() => {
       course.title === "Computer Logic"
     );
   });
+});
+
+const canPreview = computed(() => {
+  return user.value.role === "teacher" || user.value.role === "admin";
+});
+
+const profileInitials = computed(() => {
+  return user.value.name?.split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase() || "K";
 });
 
 const tabs = computed(() => {
@@ -342,6 +363,22 @@ function fullFileUrl(url) {
 function formatDate(value) {
   return new Date(value).toLocaleString("uk-UA");
 }
+
+function testLink(testId) {
+  if (studentPreview.value) {
+    return {
+      path: `/tests/${testId}`,
+      query: { preview: "1", returnTo: "logic" }
+    };
+  }
+
+  return { path: `/tests/${testId}`, query: { returnTo: "logic" } };
+}
+
+function toggleStudentPreview() {
+  studentPreview.value = !studentPreview.value;
+  profileMenuOpen.value = false;
+}
 </script>
 
 <style scoped>
@@ -398,6 +435,11 @@ function formatDate(value) {
   flex-wrap: wrap;
   margin-top: 12px;
 }
+
+.course-user-menu { position: relative; margin-left: auto; }
+.profile-trigger { width: 38px; height: 38px; border: 1px solid var(--logic-cyan); border-radius: 50%; background: #111722; color: #fff; font-weight: 800; cursor: pointer; }
+.profile-menu { position: absolute; top: calc(100% + 10px); right: 0; z-index: 80; display: grid; min-width: 240px; padding: 10px; border: 1px solid rgba(255, 255, 255, .18); border-radius: 8px; background: #111722; box-shadow: 0 16px 36px rgba(0,0,0,.36); }
+.profile-menu strong, .profile-menu a, .profile-menu button { padding: 10px; color: #fff; text-align: left; text-decoration: none; font: inherit; }.profile-menu button { border: 0; background: transparent; cursor: pointer; }.profile-menu a:hover, .profile-menu button:hover { background: rgba(255,255,255,.08); }
 
 .logic-course {
   --logic-cyan: #00ffff;

@@ -17,6 +17,9 @@ import GroupsView from "../views/GroupsView.vue";
 import TeacherGradebookView from "../views/TeacherGradebookView.vue";
 import ForumView from "../views/ForumView.vue";
 import MaterialView from "../views/MaterialView.vue";
+import TechnologiesView from "../views/TechnologiesView.vue";
+import SystemProgrammingView from "../views/SystemProgrammingView.vue";
+import ElectroRadioMeasurementsView from "../views/ElectroRadioMeasurementsView.vue";
 
 const routes = [
   {
@@ -59,6 +62,18 @@ const routes = [
   {
     path: "/courses/logic",
     component: CourseLogicView
+  },
+  {
+    path: "/courses/technologies",
+    component: TechnologiesView
+  },
+  {
+    path: "/courses/system-programming",
+    component: SystemProgrammingView
+  },
+  {
+    path: "/courses/electro-radio-measurements",
+    component: ElectroRadioMeasurementsView
   },
   {
     path: "/teacher-materials",

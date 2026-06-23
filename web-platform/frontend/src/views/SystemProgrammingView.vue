@@ -1,5 +1,5 @@
 <template>
-  <div class="course-shell electronics-course electric-course-page">
+  <div class="course-shell electronics-course electric-course-page system-programming-course">
     <div class="electronics-bg" aria-hidden="true">
       <div class="electronics-grid"></div>
       <div class="electronics-glow glow-warm"></div>
@@ -39,9 +39,9 @@
     <main>
       <section class="hero template-course-hero">
         <div class="hero-content">
-          <h1>Комп'ютерна електроніка</h1>
+          <h1>Системне програмування</h1>
           <p class="subtitle">
-            Апаратне забезпечення, напівпровідники, схеми, сигнали та цифрова електроніка.
+            Процеси, пам'ять, файлові системи та взаємодія програм з операційною системою.
           </p>
         </div>
 
@@ -96,16 +96,16 @@
             <div class="course-overview-grid">
               <article class="content-panel wide-panel">
                 <p class="eyebrow">Банер курсу</p>
-                <h3>Комп'ютерна електроніка</h3>
+                <h3>Системне програмування</h3>
                 <p>
-                  Електронні компоненти, схеми, сигнали, сенсори та базові принципи апаратного забезпечення.
+                  Процеси, пам'ять, файлові системи та взаємодія програм з операційною системою.
                 </p>
               </article>
 
               <article class="content-panel">
                 <h3>Деталі</h3>
                 <ul>
-                  <li>Тут ви вивчите більше про діоди, резистори, мікросхеми, сигнали та роботу базових електронних схем.</li>
+                  <li>Тут ви вивчите процеси, керування пам'яттю, файлові системи, системні виклики та взаємодію програм з ОС.</li>
                 </ul>
               </article>
             </div>
@@ -264,9 +264,9 @@ const profileMenuOpen = ref(false);
 const isJoined = computed(() => {
   return user.value.joinedCourses?.some((course) => {
     return (
-      course.slug === "electronics" ||
-      course === "electronics" ||
-      course.title === "Computer Electronics"
+      course.slug === "system-programming" ||
+      course === "system-programming" ||
+      course.title === "System Programming"
     );
   });
 });
@@ -298,7 +298,7 @@ onMounted(async () => {
     await loadMaterials();
 
     try {
-      const testsRes = await api.get("/tests/course/electronics");
+      const testsRes = await api.get("/tests/course/system-programming");
       tests.value = testsRes.data;
     } catch {
       tests.value = [];
@@ -307,7 +307,7 @@ onMounted(async () => {
     try {
       const resultsRes = await api.get("/results");
       results.value = resultsRes.data.filter((result) => {
-        return result.course?.slug === "electronics";
+        return result.course?.slug === "system-programming";
       });
     } catch {
       results.value = [];
@@ -319,7 +319,7 @@ onMounted(async () => {
 
 async function loadMaterials() {
   try {
-    const materialsRes = await api.get("/materials/course/electronics");
+    const materialsRes = await api.get("/materials/course/system-programming");
     materials.value = materialsRes.data;
   } catch {
     materials.value = [];
@@ -330,7 +330,7 @@ async function joinCourse() {
   if (isJoined.value) return;
 
   try {
-    await api.post("/courses/electronics/enroll");
+    await api.post("/courses/system-programming/enroll");
 
     const userRes = await api.get("/users/me");
     user.value = userRes.data;
@@ -386,11 +386,11 @@ function testLink(testId) {
   if (studentPreview.value) {
     return {
       path: `/tests/${testId}`,
-      query: { preview: "1", returnTo: "electronics" }
+      query: { preview: "1", returnTo: "system-programming" }
     };
   }
 
-  return { path: `/tests/${testId}`, query: { returnTo: "electronics" } };
+  return { path: `/tests/${testId}`, query: { returnTo: "system-programming" } };
 }
 
 function toggleStudentPreview() {
@@ -467,6 +467,11 @@ function toggleStudentPreview() {
   background: #070707;
   color: #fff;
   position: relative;
+}
+
+.system-programming-course {
+  --electric-orange: #f6c945;
+  --electric-blue: #ff8a4c;
 }
 
 .electronics-bg,
@@ -1048,5 +1053,119 @@ main,
   position: relative;
   z-index: 8;
   margin-top: 28px;
+}
+.system-programming-course {
+  --electric-orange: #ffd166;
+  --electric-blue: #4ade80;
+  background: #08110d;
+}
+
+.system-programming-course .electronics-bg {
+  background:
+    linear-gradient(90deg, rgba(74, 222, 128, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(255, 209, 102, 0.05) 1px, transparent 1px),
+    #08110d;
+  background-size: 32px 32px;
+}
+
+.system-programming-course .electronics-grid {
+  inset: 0;
+  opacity: 0.55;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 18px, rgba(74, 222, 128, 0.08) 18px 19px),
+    repeating-linear-gradient(0deg, transparent 0 46px, rgba(255, 209, 102, 0.08) 46px 47px);
+  animation: system-memory-scan 7s steps(7, end) infinite;
+}
+
+.system-programming-course .electronics-glow,
+.system-programming-course .electronics-shape.ring,
+.system-programming-course .electronics-shape.pulse {
+  display: none;
+}
+
+.system-programming-course .electronics-shape.chip {
+  width: min(34vw, 390px);
+  height: 48px;
+  right: 6%;
+  top: 26%;
+  border: 1px solid rgba(74, 222, 128, 0.6);
+  border-radius: 0;
+  background: repeating-linear-gradient(90deg, rgba(74, 222, 128, 0.18) 0 8%, transparent 8% 12%);
+  transform: none;
+  animation: system-process-queue 4.5s linear infinite;
+}
+
+.system-programming-course .electric-bug-layer {
+  opacity: 0.7;
+  mix-blend-mode: normal;
+}
+
+.system-programming-course .electric-bug-layer::before,
+.system-programming-course .electric-bug-layer::after {
+  background: repeating-linear-gradient(90deg, rgba(74, 222, 128, 0.18) 0 2px, transparent 2px 12px);
+  clip-path: inset(14% 0 73% 0);
+  animation: system-thread-flow 5s linear infinite;
+}
+
+.system-programming-course .electric-bug-layer::after {
+  clip-path: inset(77% 0 10% 0);
+  animation-delay: -2.2s;
+}
+
+.system-programming-course .electric-bug-layer span {
+  height: 4px;
+  border-radius: 0;
+  background: var(--electric-blue);
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.65);
+  animation-name: system-thread-flow;
+}
+
+.system-programming-course .electronics-particles span {
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  background: var(--electric-orange);
+  box-shadow: 0 0 12px rgba(255, 209, 102, 0.66);
+  animation-name: system-memory-block;
+}
+
+.system-programming-course .board-frame {
+  border-color: rgba(74, 222, 128, 0.52);
+  border-radius: 2px;
+  background: repeating-linear-gradient(0deg, rgba(74, 222, 128, 0.08) 0 1px, transparent 1px 24px), #07120c;
+  box-shadow: inset 0 0 42px rgba(74, 222, 128, 0.12), 0 0 54px rgba(255, 209, 102, 0.13);
+  animation: system-page-shift 8s steps(5, end) infinite;
+}
+
+.system-programming-course .processor-core {
+  border-color: var(--electric-blue);
+  box-shadow: inset 0 0 24px rgba(74, 222, 128, 0.17);
+}
+
+@keyframes system-memory-scan {
+  0%, 100% { transform: translateY(0); opacity: 0.32; }
+  50% { transform: translateY(32px); opacity: 0.7; }
+}
+
+@keyframes system-process-queue {
+  0%, 100% { transform: translateX(0); opacity: 0.45; }
+  50% { transform: translateX(-9vw); opacity: 0.9; }
+}
+
+@keyframes system-thread-flow {
+  from { transform: translateX(-18vw); opacity: 0; }
+  15%, 80% { opacity: 0.8; }
+  to { transform: translateX(45vw); opacity: 0; }
+}
+
+@keyframes system-memory-block {
+  from { transform: translateY(0) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.9; }
+  to { transform: translateY(-80vh) rotate(90deg); opacity: 0; }
+}
+
+@keyframes system-page-shift {
+  0%, 100% { transform: rotate(45deg) translate(0, 0); }
+  50% { transform: rotate(45deg) translate(18px, -18px); }
 }
 </style>

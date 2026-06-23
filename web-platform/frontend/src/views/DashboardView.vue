@@ -18,6 +18,9 @@
         <RouterLink class="sidebar-link" to="/dashboard">Панель керування</RouterLink>
         <RouterLink class="sidebar-link" to="/courses/electronics">Електроніка</RouterLink>
         <RouterLink class="sidebar-link" to="/courses/logic">Логіка</RouterLink>
+        <RouterLink class="sidebar-link" to="/courses/technologies">Технології</RouterLink>
+        <RouterLink class="sidebar-link" to="/courses/system-programming">Системне програмування</RouterLink>
+        <RouterLink class="sidebar-link" to="/courses/electro-radio-measurements">Електрорадіо вимірювання</RouterLink>
         <RouterLink class="sidebar-link" to="/profile">Профіль</RouterLink>
         <RouterLink class="sidebar-link" to="/notifications">Сповіщення</RouterLink>
         <RouterLink class="sidebar-link" to="/results">Результати</RouterLink>
@@ -90,6 +93,33 @@
               <p>Булева алгебра, таблиці істинності та логічні вентилі.</p>
 
               <RouterLink class="button primary" to="/courses/logic">
+                Відкрити курс
+              </RouterLink>
+            </article>
+
+            <article class="dashboard-panel">
+              <h3>Комп'ютерні технології</h3>
+              <p>Сучасні цифрові інструменти, мережі та робочі процеси в ІТ.</p>
+
+              <RouterLink class="button primary" to="/courses/technologies">
+                Відкрити курс
+              </RouterLink>
+            </article>
+
+            <article class="dashboard-panel">
+              <h3>Системне програмування</h3>
+              <p>Процеси, пам'ять, файлові системи та взаємодія з операційною системою.</p>
+
+              <RouterLink class="button primary" to="/courses/system-programming">
+                Відкрити курс
+              </RouterLink>
+            </article>
+
+            <article class="dashboard-panel">
+              <h3>Електрорадіо вимірювання</h3>
+              <p>Прилади, сигнали, точність вимірювань та аналіз електричних параметрів.</p>
+
+              <RouterLink class="button primary" to="/courses/electro-radio-measurements">
                 Відкрити курс
               </RouterLink>
             </article>
@@ -203,19 +233,7 @@
                 <strong>{{ formatDate(task.deadline) }}</strong>
               </p>
 
-              <RouterLink
-                v-if="task.courseSlug === 'electronics'"
-                class="button small"
-                to="/courses/electronics"
-              >
-                Відкрити курс
-              </RouterLink>
-
-              <RouterLink
-                v-if="task.courseSlug === 'logic'"
-                class="button small"
-                to="/courses/logic"
-              >
+              <RouterLink class="button small" :to="`/courses/${task.courseSlug}`">
                 Відкрити курс
               </RouterLink>
             </article>
@@ -234,6 +252,7 @@
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import api from "../services/api";
+import { courseBySlug, courseCatalog } from "../data/courseCatalog";
 
 const router = useRouter();
 
@@ -311,7 +330,7 @@ async function loadUpcomingTasks() {
 
 function getAvailableCourseSlugs() {
   if (user.value.role === "teacher" || user.value.role === "admin") {
-    return ["electronics", "logic"];
+    return courseCatalog.map((course) => course.slug);
   }
 
   const joined = user.value.joinedCourses || [];
@@ -323,12 +342,11 @@ function getAvailableCourseSlugs() {
     })
     .filter(Boolean);
 
-  return slugs.length ? slugs : ["electronics", "logic"];
+  return slugs.length ? slugs : courseCatalog.map((course) => course.slug);
 }
 
 function courseTitle(slug) {
-  if (slug === "logic") return "Комп'ютерна логіка";
-  return "Комп'ютерна електроніка";
+  return courseBySlug[slug]?.title || "Курс";
 }
 
 function formatDate(value) {

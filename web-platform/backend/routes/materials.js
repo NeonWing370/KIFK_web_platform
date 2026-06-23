@@ -10,6 +10,7 @@ const Material = require("../models/Material");
 const Course = require("../models/Course");
 const User = require("../models/User");
 const Notification = require("../models/Notification");
+const { getCourseDefinition } = require("../data/courseCatalog");
 
 const storage = multer.diskStorage({
     destination(req, file, cb) {
@@ -45,12 +46,8 @@ async function findCourse(courseId) {
         .toLowerCase()
         .trim();
 
-    const aliases =
-    normalized === "electronics"
-        ? ["electronics", "computer-electronics", "computer electronics", "comp electronics"]
-        : normalized === "logic"
-            ? ["logic", "computer-logic", "computer logic", "comp logic"]
-            : [normalized];
+    const definition = getCourseDefinition(normalized);
+    const aliases = definition ? definition[1].aliases : [normalized];
 
     return Course.findOne({
         $or: [
@@ -62,11 +59,7 @@ async function findCourse(courseId) {
             {
                 title: {
                     $regex:
-                    normalized === "electronics"
-                        ? "electronics"
-                        : normalized === "logic"
-                            ? "logic"
-                            : normalized,
+                    definition ? definition[1].title : normalized,
                     $options: "i"
                 }
             }
@@ -83,12 +76,13 @@ async function resolveCourse(courseId, userId) {
     );
 
     if (!course) {
+        const definition = getCourseDefinition(requestedCourseId);
+        const slug = definition ? definition[0] : requestedCourseId;
+
         course = await Course.create({
             title:
-            requestedCourseId === "logic"
-                ? "Computer Logic"
-                : "Computer Electronics",
-            slug: requestedCourseId,
+            definition ? definition[1].title : "Computer Electronics",
+            slug,
             teacher: userId,
             students: []
         });

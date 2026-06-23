@@ -17,6 +17,10 @@
           Прохідний бал: {{ test.passScore || 60 }}%
         </p>
 
+        <p v-if="isPreview" class="preview-note">
+          Режим перевірки викладача: результат не буде збережено в журналі оцінок.
+        </p>
+
         <div
           v-for="(q, index) in test.questions"
           :key="index"
@@ -41,7 +45,7 @@
         </div>
 
         <button class="button primary" type="button" @click="submitTest">
-          Завершити тест
+          {{ isPreview ? "Перевірити тест" : "Завершити тест" }}
         </button>
 
         <p class="message">{{ message }}</p>
@@ -56,7 +60,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import api from "../services/api";
 
@@ -67,6 +71,9 @@ const user = ref({});
 const test = ref(null);
 const answers = ref([]);
 const message = ref("");
+const isPreview = computed(() => {
+  return route.query.preview === "1" && ["teacher", "admin"].includes(user.value.role);
+});
 
 onMounted(async () => {
   try {
@@ -85,14 +92,17 @@ onMounted(async () => {
 async function submitTest() {
   try {
     const res = await api.post(`/tests/${route.params.id}/submit`, {
-      answers: answers.value
+      answers: answers.value,
+      preview: isPreview.value
     });
 
     message.value = `Результат: ${res.data.score}/${res.data.maxScore}, ${res.data.percentage}%`;
 
-    setTimeout(() => {
-      router.push("/courses/electronics");
-    }, 1500);
+    if (!isPreview.value) {
+      setTimeout(() => {
+        router.push(`/courses/${route.query.returnTo || "electronics"}`);
+      }, 1500);
+    }
   } catch (error) {
     message.value = error.response?.data?.message || "Не вдалося відправити тест.";
   }
@@ -129,5 +139,11 @@ async function submitTest() {
   gap: 10px;
   margin-top: 12px;
   cursor: pointer;
+}
+
+.preview-note {
+  padding: 12px 14px;
+  border-left: 3px solid #00e5ff;
+  background: rgba(0, 229, 255, 0.08);
 }
 </style>

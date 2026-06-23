@@ -1,5 +1,5 @@
 <template>
-  <div class="course-shell electronics-course electric-course-page">
+  <div class="course-shell electronics-course electric-course-page technologies-course">
     <div class="electronics-bg" aria-hidden="true">
       <div class="electronics-grid"></div>
       <div class="electronics-glow glow-warm"></div>
@@ -21,15 +21,27 @@
         <span>KIFK</span>
       </RouterLink>
 
-      <span class="user-chip">{{ user.name }} | {{ user.role }}</span>
+      <div class="course-user-menu">
+        <button class="profile-trigger" type="button" :aria-expanded="profileMenuOpen" @click="profileMenuOpen = !profileMenuOpen">
+          {{ profileInitials }}
+        </button>
+        <div v-if="profileMenuOpen" class="profile-menu">
+          <strong>{{ user.name }}</strong>
+          <RouterLink to="/profile" @click="profileMenuOpen = false">Персональний кабінет</RouterLink>
+          <RouterLink to="/notifications" @click="profileMenuOpen = false">Сповіщення</RouterLink>
+          <button v-if="canPreview" type="button" @click="toggleStudentPreview">
+            {{ studentPreview ? "Повернути режим викладача" : "Перейти в режим студента" }}
+          </button>
+        </div>
+      </div>
     </header>
 
     <main>
       <section class="hero template-course-hero">
         <div class="hero-content">
-          <h1>Комп'ютерна електроніка</h1>
+          <h1>Комп'ютерні технології</h1>
           <p class="subtitle">
-            Апаратне забезпечення, напівпровідники, схеми, сигнали та цифрова електроніка.
+            Сучасні цифрові інструменти, мережі та робочі процеси в ІТ.
           </p>
         </div>
 
@@ -84,19 +96,16 @@
             <div class="course-overview-grid">
               <article class="content-panel wide-panel">
                 <p class="eyebrow">Банер курсу</p>
-                <h3>Комп'ютерна електроніка</h3>
+                <h3>Комп'ютерні технології</h3>
                 <p>
-                  Електронні компоненти, схеми, сигнали, сенсори та базові принципи апаратного забезпечення.
+                  Сучасні цифрові інструменти, мережі та робочі процеси в ІТ.
                 </p>
               </article>
 
               <article class="content-panel">
                 <h3>Деталі</h3>
                 <ul>
-                  <li>Категорія: Hardware</li>
-                  <li>Рівень: Beginner</li>
-                  <li>Викладач: Course Teacher</li>
-                  <li>Тут ви вивчите більше про діоди, резистори, мікросхеми, сигнали та роботу базових електронних схем.</li>
+                  <li>Тут ви вивчите сучасні цифрові сервіси, мережеві технології, хмарні інструменти та принципи безпечної роботи з даними.</li>
                 </ul>
               </article>
             </div>
@@ -181,11 +190,13 @@
                   <p>Дедлайн: {{ test.deadline || "Не встановлено" }}</p>
 
                   <RouterLink
+                    v-if="user.role === 'student' || studentPreview"
                     class="button primary"
-                    :to="`/tests/${test._id}`"
+                    :to="testLink(test._id)"
                   >
-                    Пройти тест
+                    {{ studentPreview ? "Перевірити тест" : "Пройти тест" }}
                   </RouterLink>
+                  <p v-else>Увімкніть режим студента через меню профілю, щоб перевірити тест.</p>
                 </article>
               </div>
 
@@ -247,15 +258,25 @@ const activeTab = ref("overview");
 const materials = ref([]);
 const tests = ref([]);
 const results = ref([]);
+const studentPreview = ref(false);
+const profileMenuOpen = ref(false);
 
 const isJoined = computed(() => {
   return user.value.joinedCourses?.some((course) => {
     return (
-      course.slug === "electronics" ||
-      course === "electronics" ||
-      course.title === "Computer Electronics"
+      course.slug === "technologies" ||
+      course === "technologies" ||
+      course.title === "Computer Technologies"
     );
   });
+});
+
+const canPreview = computed(() => {
+  return user.value.role === "teacher" || user.value.role === "admin";
+});
+
+const profileInitials = computed(() => {
+  return user.value.name?.split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase() || "K";
 });
 
 const tabs = computed(() => {
@@ -277,7 +298,7 @@ onMounted(async () => {
     await loadMaterials();
 
     try {
-      const testsRes = await api.get("/tests/course/electronics");
+      const testsRes = await api.get("/tests/course/technologies");
       tests.value = testsRes.data;
     } catch {
       tests.value = [];
@@ -286,7 +307,7 @@ onMounted(async () => {
     try {
       const resultsRes = await api.get("/results");
       results.value = resultsRes.data.filter((result) => {
-        return result.course?.slug === "electronics";
+        return result.course?.slug === "technologies";
       });
     } catch {
       results.value = [];
@@ -298,7 +319,7 @@ onMounted(async () => {
 
 async function loadMaterials() {
   try {
-    const materialsRes = await api.get("/materials/course/electronics");
+    const materialsRes = await api.get("/materials/course/technologies");
     materials.value = materialsRes.data;
   } catch {
     materials.value = [];
@@ -309,7 +330,7 @@ async function joinCourse() {
   if (isJoined.value) return;
 
   try {
-    await api.post("/courses/electronics/enroll");
+    await api.post("/courses/technologies/enroll");
 
     const userRes = await api.get("/users/me");
     user.value = userRes.data;
@@ -359,6 +380,22 @@ function fullFileUrl(url) {
 
 function formatDate(value) {
   return new Date(value).toLocaleString("uk-UA");
+}
+
+function testLink(testId) {
+  if (studentPreview.value) {
+    return {
+      path: `/tests/${testId}`,
+      query: { preview: "1", returnTo: "technologies" }
+    };
+  }
+
+  return { path: `/tests/${testId}`, query: { returnTo: "technologies" } };
+}
+
+function toggleStudentPreview() {
+  studentPreview.value = !studentPreview.value;
+  profileMenuOpen.value = false;
 }
 </script>
 
@@ -417,6 +454,11 @@ function formatDate(value) {
   margin-top: 12px;
 }
 
+.course-user-menu { position: relative; margin-left: auto; }
+.profile-trigger { width: 38px; height: 38px; border: 1px solid var(--electric-blue); border-radius: 50%; background: #111722; color: #fff; font-weight: 800; cursor: pointer; }
+.profile-menu { position: absolute; top: calc(100% + 10px); right: 0; z-index: 80; display: grid; min-width: 240px; padding: 10px; border: 1px solid rgba(255, 255, 255, .18); border-radius: 8px; background: #111722; box-shadow: 0 16px 36px rgba(0,0,0,.36); }
+.profile-menu strong, .profile-menu a, .profile-menu button { padding: 10px; color: #fff; text-align: left; text-decoration: none; font: inherit; }.profile-menu button { border: 0; background: transparent; cursor: pointer; }.profile-menu a:hover, .profile-menu button:hover { background: rgba(255,255,255,.08); }
+
 .electronics-course {
   --electric-orange: #ff5e00;
   --electric-blue: #00b2ff;
@@ -425,6 +467,11 @@ function formatDate(value) {
   background: #070707;
   color: #fff;
   position: relative;
+}
+
+.technologies-course {
+  --electric-orange: #65d46e;
+  --electric-blue: #2dd4bf;
 }
 
 .electronics-bg,
@@ -1007,4 +1054,123 @@ main,
   z-index: 8;
   margin-top: 28px;
 }
+.technologies-course {
+  --electric-orange: #38d996;
+  --electric-blue: #22c8d8;
+  background: #061318;
+}
+
+.technologies-course .electronics-bg {
+  background:
+    linear-gradient(125deg, rgba(34, 200, 216, 0.08), transparent 38%),
+    linear-gradient(305deg, rgba(56, 217, 150, 0.09), transparent 34%),
+    #061318;
+}
+
+.technologies-course .electronics-grid {
+  inset: -12%;
+  opacity: 0.65;
+  background-image:
+    linear-gradient(60deg, transparent 48%, rgba(34, 200, 216, 0.14) 49% 51%, transparent 52%),
+    linear-gradient(-60deg, transparent 48%, rgba(56, 217, 150, 0.12) 49% 51%, transparent 52%);
+  background-size: 88px 74px;
+  animation: technology-network-pan 16s linear infinite;
+}
+
+.technologies-course .electronics-glow {
+  border-radius: 8px;
+  filter: blur(34px);
+  opacity: 0.2;
+}
+
+.technologies-course .glow-warm {
+  width: 38vw;
+  height: 10vh;
+  top: 20%;
+  left: -6%;
+  background: #38d996;
+  animation: technology-link-pulse 5s ease-in-out infinite;
+}
+
+.technologies-course .glow-cool {
+  width: 10vw;
+  height: 42vh;
+  right: 12%;
+  bottom: 10%;
+  background: #22c8d8;
+  animation: technology-link-pulse 6.5s ease-in-out infinite reverse;
+}
+
+.technologies-course .electronics-shape.ring {
+  width: 190px;
+  height: 190px;
+  border-color: rgba(34, 200, 216, 0.7);
+  border-radius: 8px;
+  transform: rotate(30deg);
+  animation: technology-node-orbit 13s linear infinite;
+}
+
+.technologies-course .electronics-shape.chip {
+  width: 128px;
+  height: 128px;
+  border-color: rgba(56, 217, 150, 0.7);
+  border-radius: 50%;
+  transform: none;
+  animation: technology-node-orbit 17s linear infinite reverse;
+}
+
+.technologies-course .electronics-shape.pulse {
+  border-color: rgba(34, 200, 216, 0.6);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  animation: technology-node-ping 3.8s ease-out infinite;
+}
+
+.technologies-course .electric-bug-layer::before,
+.technologies-course .electric-bug-layer::after {
+  background: linear-gradient(90deg, transparent, rgba(34, 200, 216, 0.28), transparent);
+  clip-path: none;
+  animation: technology-packet 4.8s linear infinite;
+}
+
+.technologies-course .electric-bug-layer::after {
+  background: linear-gradient(90deg, transparent, rgba(56, 217, 150, 0.26), transparent);
+  animation-delay: -2.4s;
+}
+
+.technologies-course .electric-bug-layer span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--electric-blue);
+  box-shadow: 0 0 16px rgba(34, 200, 216, 0.82);
+  animation-name: technology-data-hop;
+}
+
+.technologies-course .electronics-particles span {
+  width: 6px;
+  height: 6px;
+  background: var(--electric-orange);
+  animation-name: technology-data-hop;
+}
+
+.technologies-course .board-frame {
+  border-color: rgba(34, 200, 216, 0.66);
+  background: radial-gradient(circle at 50% 50%, rgba(56, 217, 150, 0.14) 0 3px, transparent 4px), #071d21;
+  background-size: 44px 44px;
+  box-shadow: inset 0 0 46px rgba(34, 200, 216, 0.12), 0 0 58px rgba(56, 217, 150, 0.18);
+  animation: technology-hub-float 9s ease-in-out infinite;
+}
+
+.technologies-course .processor-core {
+  border-color: var(--electric-orange);
+  border-radius: 50%;
+}
+
+@keyframes technology-network-pan { to { transform: translate3d(44px, 37px, 0); } }
+@keyframes technology-link-pulse { 0%,100% { transform: scaleX(.65); opacity: .12; } 50% { transform: scaleX(1.25); opacity: .35; } }
+@keyframes technology-node-orbit { to { transform: rotate(390deg); } }
+@keyframes technology-node-ping { 0% { transform: scale(.45); opacity: .8; } 100% { transform: scale(1.7); opacity: 0; } }
+@keyframes technology-packet { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@keyframes technology-data-hop { 0%,100% { transform: translate(0, 0); opacity: .25; } 45% { transform: translate(80px, -44px); opacity: 1; } 70% { transform: translate(124px, 22px); opacity: .5; } }
+@keyframes technology-hub-float { 0%,100% { transform: rotate(45deg) translateY(0); } 50% { transform: rotate(45deg) translateY(-22px) scale(1.04); } }
 </style>

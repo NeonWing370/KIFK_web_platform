@@ -142,6 +142,7 @@
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import api from "../services/api";
+import { courseBySlug, courseCatalog } from "../data/courseCatalog";
 
 const router = useRouter();
 
@@ -166,11 +167,11 @@ const firstName = computed(() => {
 });
 
 const profileCourses = computed(() => {
-  return getAvailableCourseSlugs().map((slug) => ({
-    slug,
-    path: `/courses/${slug}`,
-    title: courseTitle(slug),
-    description: courseDescription(slug)
+  return courseCatalog.map((course) => ({
+    slug: course.slug,
+    path: `/courses/${course.slug}`,
+    title: course.title,
+    description: course.description
   }));
 });
 
@@ -271,23 +272,18 @@ function getAvailableCourseSlugs() {
 
   if (slugs.length) return slugs;
   if (user.value.role === "teacher" || user.value.role === "admin") {
-    return ["electronics", "logic"];
+    return courseCatalog.map((course) => course.slug);
   }
 
   return [];
 }
 
 function courseTitle(slug) {
-  if (slug === "logic") return "Комп'ютерна логіка";
-  return "Комп'ютерна електроніка";
+  return courseBySlug[slug]?.title || "Курс";
 }
 
 function courseDescription(slug) {
-  if (slug === "logic") {
-    return "Двійкова система числення, булева алгебра та логічні елементи.";
-  }
-
-  return "Діоди, резистори, мікросхеми, сигнали та електронні схеми.";
+  return courseBySlug[slug]?.description || "";
 }
 
 function formatDate(value) {

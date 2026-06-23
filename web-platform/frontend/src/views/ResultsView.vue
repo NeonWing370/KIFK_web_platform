@@ -40,6 +40,15 @@
             Статус:
             {{ result.passed ? "Склав" : "Не склав" }}
           </p>
+
+          <button
+            v-if="canManageResults"
+            class="button small danger"
+            type="button"
+            @click="deleteResult(result._id)"
+          >
+            Видалити
+          </button>
         </article>
 
         <p v-if="!results.length">
@@ -51,7 +60,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import api from "../services/api";
 
@@ -60,17 +69,36 @@ const router = useRouter();
 const user = ref({});
 const results = ref([]);
 
+const canManageResults = computed(() => {
+  return user.value.role === "teacher" || user.value.role === "admin";
+});
+
 onMounted(async () => {
   try {
     const userRes = await api.get("/users/me");
     user.value = userRes.data;
 
-    const res = await api.get("/results");
-    results.value = res.data;
+    await loadResults();
   } catch {
     router.push("/login");
   }
 });
+
+async function loadResults() {
+  const res = await api.get("/results");
+  results.value = res.data;
+}
+
+async function deleteResult(id) {
+  if (!confirm("Видалити результат тесту?")) return;
+
+  try {
+    await api.delete(`/results/${id}`);
+    await loadResults();
+  } catch (error) {
+    alert(error.response?.data?.message || "Не вдалося видалити результат.");
+  }
+}
 </script>
 
 <style scoped>
@@ -102,5 +130,16 @@ onMounted(async () => {
   border: 1px solid #293244;
   border-radius: 8px;
   background: #111722;
+}
+
+.button.small {
+  min-height: 36px;
+  padding: 8px 12px;
+}
+
+.button.danger {
+  border-color: #ef4444;
+  background: #ef4444;
+  color: #fff;
 }
 </style>

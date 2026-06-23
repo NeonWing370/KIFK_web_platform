@@ -23,6 +23,9 @@
             <select v-model="course">
               <option value="electronics">Комп'ютерна електроніка</option>
               <option value="logic">Комп'ютерна логіка</option>
+              <option value="technologies">Комп'ютерні технології</option>
+              <option value="system-programming">Системне програмування</option>
+              <option value="electro-radio-measurements">Електрорадіо вимірювання</option>
             </select>
           </label>
 

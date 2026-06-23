@@ -4,6 +4,7 @@ const auth = require("../middleware/auth");
 const Course = require("../models/Course");
 const User = require("../models/User");
 const Notification = require("../models/Notification");
+const { getCourseDefinition } = require("../data/courseCatalog");
 
 const router = express.Router();
 
@@ -21,18 +22,15 @@ async function findCourse(courseId) {
     }
 
     const normalized = String(courseId).toLowerCase().trim();
-    const aliases = normalized === "electronics"
-        ? ["electronics", "computer-electronics", "computer electronics", "comp electronics"]
-        : normalized === "logic"
-            ? ["logic", "computer-logic", "computer logic", "comp logic"]
-            : [normalized];
+    const definition = getCourseDefinition(normalized);
+    const aliases = definition ? definition[1].aliases : [normalized];
 
     return Course.findOne({
         $or: [
             { slug: { $in: aliases } },
             {
                 title: {
-                    $regex: normalized === "electronics" ? "electronics" : normalized === "logic" ? "logic" : normalized,
+                    $regex: definition ? definition[1].title : normalized,
                     $options: "i"
                 }
             }
@@ -45,9 +43,12 @@ async function resolveCourse(courseId, userId) {
     let course = await findCourse(requestedCourseId);
 
     if (!course) {
+        const definition = getCourseDefinition(requestedCourseId);
+        const slug = definition ? definition[0] : requestedCourseId;
+
         course = await Course.create({
-            title: requestedCourseId === "logic" ? "Computer Logic" : "Computer Electronics",
-            slug: requestedCourseId,
+            title: definition ? definition[1].title : "Computer Electronics",
+            slug,
             teacher: userId,
             students: []
         });

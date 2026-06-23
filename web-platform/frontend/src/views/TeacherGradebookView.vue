@@ -35,6 +35,7 @@
                 <th>Відсоток</th>
                 <th>Статус</th>
                 <th>Дата</th>
+                <th>Дії</th>
               </tr>
             </thead>
 
@@ -50,6 +51,15 @@
                   {{ result.passed ? "Склав" : "Не склав" }}
                 </td>
                 <td>{{ formatDate(result.createdAt) }}</td>
+                <td>
+                  <button
+                    class="button small danger"
+                    type="button"
+                    @click="deleteResult(result._id)"
+                  >
+                    Видалити
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -94,12 +104,27 @@ onMounted(async () => {
       return;
     }
 
-    const resultsRes = await api.get("/results");
-    results.value = resultsRes.data;
+    await loadResults();
   } catch {
     router.push("/login");
   }
 });
+
+async function loadResults() {
+  const resultsRes = await api.get("/results");
+  results.value = resultsRes.data;
+}
+
+async function deleteResult(id) {
+  if (!confirm("Видалити оцінку з журналу?")) return;
+
+  try {
+    await api.delete(`/results/${id}`);
+    await loadResults();
+  } catch (error) {
+    alert(error.response?.data?.message || "Не вдалося видалити оцінку.");
+  }
+}
 
 function formatDate(value) {
   if (!value) return "—";
@@ -165,6 +190,18 @@ td {
   padding: 12px;
   border-bottom: 1px solid #293244;
   text-align: left;
+}
+
+.button.small {
+  min-height: 34px;
+  padding: 7px 10px;
+}
+
+.button.danger {
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  background: #ef4444;
+  color: #fff;
 }
 
 @media (max-width: 800px) {
