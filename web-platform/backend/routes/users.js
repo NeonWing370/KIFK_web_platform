@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 
 const User =
 require("../models/User");
@@ -96,6 +96,26 @@ async (req, res) => {
 });
 
 
+router.get(
+"/students",
+auth,
+async (req, res) => {
+    try {
+        if (req.user.role !== "teacher" && req.user.role !== "admin") {
+            return res.status(403).json({ message: "Access denied" });
+        }
+
+        const students = await User.find({ role: "student" })
+            .select("name email role group")
+            .populate("group", "name");
+
+        res.json(students);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+);
 // ADMIN GET USERS
 
 router.get(
@@ -263,3 +283,4 @@ async (req, res) => {
 });
 
 module.exports = router;
+

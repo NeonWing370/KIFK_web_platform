@@ -78,43 +78,18 @@
       </section>
 
       <section class="home-courses">
-        <article class="content-panel">
-          <h3>Компʼютерна електроніка</h3>
-          <p>
-            Електронні компоненти, схеми, сигнали, сенсори та основи апаратного забезпечення.
-          </p>
-
-          <RouterLink class="button primary" to="/courses/electronics">
+        <article
+          v-for="course in courseCatalog"
+          :key="course.slug"
+          class="content-panel home-course-card"
+          :style="{ '--course-accent': course.accent, '--course-accent-secondary': course.accentSecondary }"
+        >
+          <p class="eyebrow">Навчальний курс</p>
+          <h3>{{ course.title }}</h3>
+          <p>{{ course.description }}</p>
+          <RouterLink class="button primary" :to="`/courses/${course.slug}`">
             Відкрити курс
           </RouterLink>
-        </article>
-
-        <article class="content-panel">
-          <h3>Компʼютерна логіка</h3>
-          <p>
-            Булева алгебра, таблиці істинності, логічні вентилі та двійкові системи.
-          </p>
-
-          <RouterLink class="button primary" to="/courses/logic">
-            Відкрити курс
-          </RouterLink>
-        </article>
-        <article class="content-panel">
-          <h3>Комп'ютерні технології</h3>
-          <p>Сучасні цифрові інструменти, мережі та робочі процеси в ІТ.</p>
-          <RouterLink class="button primary" to="/courses/technologies">Відкрити курс</RouterLink>
-        </article>
-
-        <article class="content-panel">
-          <h3>Системне програмування</h3>
-          <p>Процеси, пам'ять, файлові системи та взаємодія програм з операційною системою.</p>
-          <RouterLink class="button primary" to="/courses/system-programming">Відкрити курс</RouterLink>
-        </article>
-
-        <article class="content-panel">
-          <h3>Електрорадіо вимірювання</h3>
-          <p>Прилади, сигнали, точність вимірювань та аналіз електричних параметрів.</p>
-          <RouterLink class="button primary" to="/courses/electro-radio-measurements">Відкрити курс</RouterLink>
         </article>
       </section>
 
@@ -124,6 +99,7 @@
 
 <script setup>
 import { computed } from "vue";
+import { courseCatalog } from "../data/courseCatalog";
 
 const hasToken = computed(() => {
   return Boolean(localStorage.getItem("token"));
@@ -201,6 +177,14 @@ const hasToken = computed(() => {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
   padding: 24px 36px;
+}
+
+.home-course-card {
+  border-top: 3px solid var(--course-accent);
+}
+
+.home-course-card .eyebrow {
+  color: var(--course-accent);
 }
 
 .home-welcome {

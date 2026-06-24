@@ -1683,3 +1683,271 @@ th {
     min-width: 0;
   }
 }
+
+
+/* Mobile layout for the Vue platform */
+.teacher-page,
+.test-page,
+.material-page,
+.groups-page,
+.gradebook-page,
+.results-page {
+  font-family: "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+@media (max-width: 760px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-size: 16px;
+  }
+
+  .home-page,
+  .vue-dashboard-page,
+  .profile-page,
+  .teacher-page,
+  .material-page,
+  .groups-page,
+  .gradebook-page {
+    display: block !important;
+    min-width: 0;
+  }
+
+  .home-sidebar,
+  .vue-dashboard-sidebar,
+  .profile-sidebar,
+  .teacher-sidebar,
+  .material-sidebar,
+  .groups-sidebar,
+  .gradebook-sidebar {
+    position: sticky !important;
+    top: 0;
+    z-index: 60;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 10px 12px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+  .teacher-sidebar,
+  .material-sidebar,
+  .groups-sidebar,
+  .gradebook-sidebar {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .teacher-sidebar::-webkit-scrollbar,
+  .material-sidebar::-webkit-scrollbar,
+  .groups-sidebar::-webkit-scrollbar,
+  .gradebook-sidebar::-webkit-scrollbar,
+  .sidebar-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home-sidebar .sidebar-brand,
+  .vue-dashboard-sidebar .sidebar-brand,
+  .profile-sidebar .sidebar-brand {
+    display: inline-flex;
+    margin: 0 10px 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .vue-dashboard-sidebar .sidebar-user {
+    display: none;
+  }
+
+  .home-sidebar .sidebar-footer,
+  .vue-dashboard-sidebar .sidebar-footer {
+    display: inline-flex;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .profile-sidebar > .sidebar-link.danger {
+    display: inline-flex;
+  }
+
+  .home-sidebar .sidebar-nav,
+  .vue-dashboard-sidebar .sidebar-nav,
+  .profile-sidebar .sidebar-nav {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .sidebar-link,
+  .teacher-sidebar > .sidebar-link,
+  .material-sidebar > .sidebar-link,
+  .groups-sidebar > .sidebar-link,
+  .gradebook-sidebar > .sidebar-link {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding-inline: 12px;
+    white-space: nowrap;
+  }
+
+  .dashboard-topbar,
+  .teacher-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    flex-wrap: wrap;
+    min-height: 58px;
+    padding: 10px 14px !important;
+  }
+
+  .dashboard-topbar h1,
+  .teacher-header h1 {
+    font-size: 18px;
+  }
+
+  .user-chip {
+    max-width: 100%;
+    margin-left: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .dashboard-content,
+  .teacher-main,
+  .material-main,
+  .groups-main,
+  .gradebook-main,
+  .test-main {
+    min-width: 0;
+    padding: 16px !important;
+  }
+
+  .content-panel,
+  .teacher-main .content-panel,
+  .material-main .content-panel,
+  .groups-main .content-panel,
+  .gradebook-main .content-panel,
+  .test-main .content-panel {
+    margin: 0 0 16px !important;
+    padding: 16px !important;
+  }
+
+  .course-shell .template-course-hero {
+    min-height: auto !important;
+    padding: 92px 16px 26px !important;
+  }
+
+  .course-shell .hero-content h1 {
+    font-size: clamp(32px, 10vw, 44px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .course-shell .subtitle {
+    font-size: 16px !important;
+    line-height: 1.55 !important;
+  }
+
+  .course-shell .electronics-hero-visual {
+    width: min(100%, 320px) !important;
+    min-height: 230px !important;
+    margin-inline: auto;
+  }
+
+  .course-shell .course-signature {
+    inset: 13% !important;
+  }
+
+  .course-tabs {
+    width: 100%;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+  }
+
+  .course-tabs button {
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding-inline: 14px;
+  }
+
+  .course-overview-grid,
+  .teacher-tools,
+  .stats-grid,
+  .dashboard-grid,
+  .average-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .profile-card {
+    margin: 16px !important;
+    padding: 16px !important;
+  }
+
+  .profile-course-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .section-heading,
+  .group-heading,
+  .student-row,
+  .add-student-row,
+  .filter-panel,
+  .submission-head {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .student-actions {
+    justify-content: flex-start !important;
+  }
+
+  .button,
+  .button.small {
+    min-height: 44px;
+  }
+
+  .table-wrap {
+    margin-inline: -4px;
+    padding-inline: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-wrap table {
+    min-width: 680px;
+  }
+
+  .question-card {
+    margin: 16px 0 !important;
+    padding: 14px !important;
+  }
+
+  .answer-option {
+    min-height: 44px;
+    align-items: center;
+  }
+}

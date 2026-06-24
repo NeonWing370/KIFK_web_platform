@@ -16,11 +16,14 @@
       <nav class="sidebar-nav">
         <RouterLink class="sidebar-link" to="/">Головна</RouterLink>
         <RouterLink class="sidebar-link" to="/dashboard">Панель керування</RouterLink>
-        <RouterLink class="sidebar-link" to="/courses/electronics">Електроніка</RouterLink>
-        <RouterLink class="sidebar-link" to="/courses/logic">Логіка</RouterLink>
-        <RouterLink class="sidebar-link" to="/courses/technologies">Технології</RouterLink>
-        <RouterLink class="sidebar-link" to="/courses/system-programming">Системне програмування</RouterLink>
-        <RouterLink class="sidebar-link" to="/courses/electro-radio-measurements">Електрорадіо вимірювання</RouterLink>
+        <RouterLink
+          v-for="course in courseCatalog"
+          :key="course.slug"
+          class="sidebar-link"
+          :to="`/courses/${course.slug}`"
+        >
+          {{ course.shortTitle }}
+        </RouterLink>
         <RouterLink class="sidebar-link" to="/profile">Профіль</RouterLink>
         <RouterLink class="sidebar-link" to="/notifications">Сповіщення</RouterLink>
         <RouterLink class="sidebar-link" to="/results">Результати</RouterLink>
@@ -79,47 +82,16 @@
 
         <section class="section dashboard-section" style="padding: 0; margin-top: 24px;">
           <div class="dashboard-grid">
-            <article class="dashboard-panel">
-              <h3>Комп'ютерна електроніка</h3>
-              <p>Схеми, сигнали, компоненти та електронні системи.</p>
-
-              <RouterLink class="button primary" to="/courses/electronics">
-                Відкрити курс
-              </RouterLink>
-            </article>
-
-            <article class="dashboard-panel">
-              <h3>Комп'ютерна логіка</h3>
-              <p>Булева алгебра, таблиці істинності та логічні вентилі.</p>
-
-              <RouterLink class="button primary" to="/courses/logic">
-                Відкрити курс
-              </RouterLink>
-            </article>
-
-            <article class="dashboard-panel">
-              <h3>Комп'ютерні технології</h3>
-              <p>Сучасні цифрові інструменти, мережі та робочі процеси в ІТ.</p>
-
-              <RouterLink class="button primary" to="/courses/technologies">
-                Відкрити курс
-              </RouterLink>
-            </article>
-
-            <article class="dashboard-panel">
-              <h3>Системне програмування</h3>
-              <p>Процеси, пам'ять, файлові системи та взаємодія з операційною системою.</p>
-
-              <RouterLink class="button primary" to="/courses/system-programming">
-                Відкрити курс
-              </RouterLink>
-            </article>
-
-            <article class="dashboard-panel">
-              <h3>Електрорадіо вимірювання</h3>
-              <p>Прилади, сигнали, точність вимірювань та аналіз електричних параметрів.</p>
-
-              <RouterLink class="button primary" to="/courses/electro-radio-measurements">
+            <article
+              v-for="course in courseCatalog"
+              :key="course.slug"
+              class="dashboard-panel course-panel"
+              :style="{ '--course-accent': course.accent }"
+            >
+              <p class="eyebrow">Навчальний курс</p>
+              <h3>{{ course.title }}</h3>
+              <p>{{ course.description }}</p>
+              <RouterLink class="button primary" :to="`/courses/${course.slug}`">
                 Відкрити курс
               </RouterLink>
             </article>
@@ -428,6 +400,10 @@ function logout() {
 .dashboard-panel {
   display: grid;
   gap: 12px;
+}
+
+.course-panel {
+  border-top: 3px solid var(--course-accent);
 }
 
 .tasks-panel {

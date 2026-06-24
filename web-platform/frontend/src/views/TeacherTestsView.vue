@@ -21,11 +21,9 @@
           <label>
             Курс
             <select v-model="course">
-              <option value="electronics">Комп'ютерна електроніка</option>
-              <option value="logic">Комп'ютерна логіка</option>
-              <option value="technologies">Комп'ютерні технології</option>
-              <option value="system-programming">Системне програмування</option>
-              <option value="electro-radio-measurements">Електрорадіо вимірювання</option>
+              <option v-for="courseOption in courseCatalog" :key="courseOption.slug" :value="courseOption.slug">
+                {{ courseOption.title }}
+              </option>
             </select>
           </label>
 
@@ -175,6 +173,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import api from "../services/api";
+import { courseCatalog } from "../data/courseCatalog";
 
 const router = useRouter();
 

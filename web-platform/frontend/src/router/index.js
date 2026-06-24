@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+﻿import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
@@ -20,6 +20,15 @@ import MaterialView from "../views/MaterialView.vue";
 import TechnologiesView from "../views/TechnologiesView.vue";
 import SystemProgrammingView from "../views/SystemProgrammingView.vue";
 import ElectroRadioMeasurementsView from "../views/ElectroRadioMeasurementsView.vue";
+import PeripheralDevicesView from "../views/PeripheralDevicesView.vue";
+import ComputerArchitectureView from "../views/ComputerArchitectureView.vue";
+import JavaScriptProgrammingView from "../views/JavaScriptProgrammingView.vue";
+import ElectricMagneticCircuitsView from "../views/ElectricMagneticCircuitsView.vue";
+import ComputerCircuitryView from "../views/ComputerCircuitryView.vue";
+import MicroprocessorSystemsView from "../views/MicroprocessorSystemsView.vue";
+import ComputerEngineeringGraphicsView from "../views/ComputerEngineeringGraphicsView.vue";
+import CProgrammingView from "../views/CProgrammingView.vue";
+import OperatingSystemsView from "../views/OperatingSystemsView.vue";
 
 const routes = [
   {
@@ -76,6 +85,42 @@ const routes = [
     component: ElectroRadioMeasurementsView
   },
   {
+    path: "/courses/peripheral-devices",
+    component: PeripheralDevicesView
+  },
+  {
+    path: "/courses/computer-architecture",
+    component: ComputerArchitectureView
+  },
+  {
+    path: "/courses/javascript-programming",
+    component: JavaScriptProgrammingView
+  },
+  {
+    path: "/courses/electric-magnetic-circuits",
+    component: ElectricMagneticCircuitsView
+  },
+  {
+    path: "/courses/computer-circuitry",
+    component: ComputerCircuitryView
+  },
+  {
+    path: "/courses/microprocessor-systems",
+    component: MicroprocessorSystemsView
+  },
+  {
+    path: "/courses/computer-engineering-graphics",
+    component: ComputerEngineeringGraphicsView
+  },
+  {
+    path: "/courses/c-programming",
+    component: CProgrammingView
+  },
+  {
+    path: "/courses/operating-systems",
+    component: OperatingSystemsView
+  },
+  {
     path: "/teacher-materials",
     component: TeacherMaterialsView
   },
@@ -129,3 +174,4 @@ router.beforeEach((to) => {
 });
 
 export default router;
+

@@ -9,8 +9,14 @@
       <nav class="sidebar-nav">
         <RouterLink class="sidebar-link" to="/">Головна</RouterLink>
         <RouterLink class="sidebar-link" to="/dashboard">Панель керування</RouterLink>
-        <RouterLink class="sidebar-link" to="/courses/electronics">Електроніка</RouterLink>
-        <RouterLink class="sidebar-link" to="/courses/logic">Логіка</RouterLink>
+        <RouterLink
+          v-for="course in courseCatalog"
+          :key="course.slug"
+          class="sidebar-link"
+          :to="`/courses/${course.slug}`"
+        >
+          {{ course.shortTitle }}
+        </RouterLink>
         <RouterLink class="sidebar-link" to="/notifications">Сповіщення</RouterLink>
         <RouterLink class="sidebar-link" to="/results">Результати</RouterLink>
       </nav>
